@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Simple Agent Console</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta content="utf-8" http-equiv="encoding" />
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script
+      type="text/javascript"
+      src="amazon-connect-1.6.4-2-g0661df6.js"
+    ></script>
+  </head>
+
+  <body>
+    <style>
+      #ccpContainer {
+        width: 265px;
+        height: 465px;
+        overflow: hidden;
+        float: left;
+        margin-left: 22px;
+        padding: 25px;
+      }
+      #section-main {
+        padding: 10px;
+        width: 960px;
+        height: 495px;
+        margin-left: 0px;
+        float: left;
+        overflow: hidden;
+      }
+    </style>
+
+    <h1>Welcome to Amazon Connect Agent Console</h1>
+
+    <section id="ccpContainer">
+      <script>
+        //----------------init CCP-----------------------------
+        var container = document.getElementById('ccpContainer');
+
+        connect.core.initCCP(container, {
+          ccpUrl: 'https://gonconnect.awsapps.com/connect/ccp#/',
+          softphone: {
+            allowFramedSoftphone: true,
+            disableRingtone: false,
+          },
+        });
+        //-----------------End init CCP-------------------------
+
+        //-----------------CCP Events----------------------------
+        connect.contact(function (contact) {
+          //--------CCP OnConnecting-----------------
+          contact.onConnecting(function (contact) {
+            console.log(
+              'CDEBUG >> ' +
+                'onConnecting() >> contactId = ' +
+                contact.contactId
+            );
+
+            var phoneNumber = contact.getConnections()[1].getAddress()[
+              'phoneNumber'
+            ];
+
+            var attributes = contact.getAttributes();
+            var EmployeeName = attributes['EmployeeName'].value;
+
+            //add details to DIV
+            $('#divDetails').append(
+              '<hr/> ALERTING CALL ' +
+                contact.contactId +
+                ' from ' +
+                EmployeeName +
+                ' <' +
+                phoneNumber +
+                '> at ' +
+                new Date().toLocaleString() +
+                '<br/><br/>'
+            );
+          });
+        });
+      </script>
+    </section>
+
+    <section id="section-main">
+      <header><h1>Amazon Connect CCP Integration Details</h1></header>
+      <fieldset>
+        <legend>Contact Details</legend>
+        <div id="divDetails"></div>
+      </fieldset>
+    </section>
+  </body>
+</html>
