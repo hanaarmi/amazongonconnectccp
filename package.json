@@ -14,7 +14,7 @@
   ],
   "main": "release/connect-streams.js",
   "types": "src/index.d.ts",
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/amazon-connect/amazon-connect-streams.git"
   },
